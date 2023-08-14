@@ -213,3 +213,8 @@ print( db.gamePlay.findOne({ "_id": whatId }, { deadline: 1 }))
 claimTrophy(whatId,'bob','Basilisk');
 ```
 
+## Scale-Out
+
+The `game` collection contains prototype documents. These change at low frequency, and are not anticipated to grow too much.
+
+`gamePlay` documents on the other hand, are expected to grow numerous, and experience high write loads. With tens of thousands of people playing concurrently, we want to distribute the load. This is acheivable by crafting a shard key that includes the `_id` of the `gamePlay` collection in it. Since _ObjectId_ is a monotonously increasing kind of critter, stating it as `hashed` is going to ensure even distribution of gamePlay documents across a sharded cluster. The `gamePlay`'s `_id` is known at runtime, and is omnipresent in every interaction. Therefore the access to that single document (per game) would be very efficient, and enroll exactly one shard. Thoug the occasional query might exist to join against the `game` collection or theoretically the gamer list (not part of this scenario), care should be taken to use a proper filter and indexing strategy to minimise impact this rarity may impose.
