@@ -85,7 +85,7 @@ Create and index for efficient end-game query
 db.gamePlay.createIndex({ _id: 1, deadline: 1, trophies:1 })
 ```
 
-### Play - Clame a trophy
+### Play - Claim a Trophy
 
 Claiming a trophy is an operation which assignes a trophy to a player, and awards points while doing it.
 The operation is atomic, so no two players can claim the same trophy.
